@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ isset($contact) ? 'Edit Contact' : 'Add New Contact' }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -72,6 +73,14 @@
             color: #666;
             margin-top: 5px;
         }
+        .select2-container {
+            width: 100% !important;
+        }
+        .select2-container .select2-selection--single {
+            height: 42px;
+            display: flex;
+            align-items: center;
+        }
     </style>
 </head>
 <body>
@@ -121,25 +130,14 @@
         </div>
     </form>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
-        // Enable search/filter in select
-        const select = document.getElementById('country_code');
-        let searchTimeout;
-
-        select.addEventListener('keydown', function(e) {
-            if (e.key.length === 1) {
-                clearTimeout(searchTimeout);
-                const searchTerm = e.key.toLowerCase();
-                const options = Array.from(this.options);
-
-                const match = options.find((opt, index) =>
-                    index > 0 && opt.text.toLowerCase().startsWith(searchTerm)
-                );
-
-                if (match) {
-                    this.value = match.value;
-                }
-            }
+        $(document).ready(function() {
+            $('#country_code').select2({
+                placeholder: 'Select a country',
+                allowClear: true
+            });
         });
     </script>
 </body>
