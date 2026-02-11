@@ -101,13 +101,9 @@
         <div class="form-group">
             <label for="country_code">Country</label>
             <select id="country_code" name="country_code" required>
-                <option value="">Select a country</option>
-                @foreach($countries as $country)
-                    <option value="{{ $country['calling_code'] }}"
-                        {{ old('country_code', $contact->country_code ?? '') == $country['calling_code'] ? 'selected' : '' }}>
-                        {{ $country['display_name'] }}
-                    </option>
-                @endforeach
+                @if(isset($contact) && $contact->country_code)
+                    <option value="{{ $contact->country_code }}" selected>Loading...</option>
+                @endif
             </select>
             @error('country_code')
                 <div class="error">{{ $message }}</div>
@@ -134,10 +130,50 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         $(document).ready(function() {
-            $('#country_code').select2({
+            const selectedCode = '{{ old('country_code', $contact->country_code ?? '') }}';
+
+            const select2Config = {
                 placeholder: 'Select a country',
-                allowClear: true
-            });
+                allowClear: true,
+                minimumInputLength: 0,
+                ajax: {
+                    url: '/api/countries/search',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            q: params.term
+                        };
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: data.map(function(country) {
+                                return {
+                                    id: country.calling_code,
+                                    text: country.display_name
+                                };
+                            })
+                        };
+                    },
+                    cache: true
+                }
+            };
+
+            $('#country_code').select2(select2Config);
+
+            // Load selected country if editing
+            if (selectedCode) {
+                $.ajax({
+                    url: '/api/countries/by-code',
+                    data: { code: selectedCode },
+                    dataType: 'json'
+                }).then(function (country) {
+                    if (country) {
+                        const option = new Option(country.display_name, country.calling_code, true, true);
+                        $('#country_code').append(option).trigger('change');
+                    }
+                });
+            }
         });
     </script>
 </body>
