@@ -24,45 +24,18 @@ class AvatarService
     public function generateAndStore()
     {
         try {
-            // Get list of monsters
-            $monstersResponse = Http::timeout(10)->get($this->apiUrl . '/api/2014/monsters');
+            // Generate unique seed for Robohash
+            $seed = Str::uuid();
 
-            if (!$monstersResponse->successful()) {
-                Log::error('Failed to fetch monsters list: ' . $monstersResponse->status());
-                return null;
-            }
-
-            $monsters = $monstersResponse->json();
-
-            if (empty($monsters['results'])) {
-                Log::error('No monsters found in API response');
-                return null;
-            }
-
-            // Pick a random monster
-            $randomMonster = $monsters['results'][array_rand($monsters['results'])];
-
-            // Get monster details
-            $monsterResponse = Http::timeout(10)->get($this->apiUrl . $randomMonster['url']);
-
-            if (!$monsterResponse->successful()) {
-                Log::error('Failed to fetch monster details: ' . $monsterResponse->status());
-                return null;
-            }
-
-            $monsterData = $monsterResponse->json();
-
-            if (empty($monsterData['image'])) {
-                Log::error('Monster has no image: ' . $randomMonster['name']);
-                return null;
-            }
+            // Build Robohash URL with parameters
+            // size: 200x200, set2: robots
+            $imageUrl = $this->apiUrl . '/' . $seed . '?size=200x200&set=set2';
 
             // Download the image
-            $imageUrl = $this->apiUrl . $monsterData['image'];
             $imageResponse = Http::timeout(10)->get($imageUrl);
 
             if (!$imageResponse->successful()) {
-                Log::error('Failed to download monster image: ' . $imageUrl . ' - Status: ' . $imageResponse->status());
+                Log::error('Failed to download avatar: ' . $imageUrl . ' - Status: ' . $imageResponse->status());
                 return null;
             }
 

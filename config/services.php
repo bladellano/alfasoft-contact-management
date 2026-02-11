@@ -32,7 +32,7 @@ return [
     ],
 
     'avatar' => [
-        'api_url' => env('AVATAR_API_URL', 'https://www.dnd5eapi.co'),
+        'api_url' => env('AVATAR_API_URL', 'https://robohash.org'),
     ],
 
     'countries' => [
