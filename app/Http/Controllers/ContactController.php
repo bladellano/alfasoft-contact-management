@@ -68,4 +68,12 @@ class ContactController extends Controller
 
         return redirect()->route('people.show', $validated['person_id'])->with('success', 'Contact updated successfully.');
     }
+
+    public function destroy(Contact $contact)
+    {
+        $personId = $contact->person_id;
+        $contact->delete();
+
+        return redirect()->route('people.show', $personId)->with('success', 'Contact deleted successfully.');
+    }
 }
