@@ -13,6 +13,12 @@ class PersonController extends Controller
         return view('people.index', compact('people'));
     }
 
+    public function show(Person $person)
+    {
+        $person->load('contacts');
+        return view('people.show', compact('person'));
+    }
+
     public function create()
     {
         return view('people.form');
