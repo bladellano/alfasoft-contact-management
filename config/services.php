@@ -31,4 +31,8 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'avatar' => [
+        'api_url' => env('AVATAR_API_URL', 'https://www.dnd5eapi.co'),
+    ],
+
 ];

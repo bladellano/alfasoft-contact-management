@@ -122,6 +122,14 @@
             cursor: pointer;
             font-size: 14px;
         }
+        .avatar-large {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            display: block;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
@@ -146,6 +154,12 @@
     @endif
 
     <div class="person-details">
+        @if($person->avatar_url)
+            <img src="{{ $person->avatar_url }}" alt="Avatar" class="avatar-large">
+        @else
+            <div class="avatar-large" style="background-color: #ccc;"></div>
+        @endif
+
         <div class="detail-row">
             <span class="detail-label">Name:</span>
             <span class="detail-value">{{ $person->name }}</span>

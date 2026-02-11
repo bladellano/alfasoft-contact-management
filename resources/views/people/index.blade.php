@@ -85,6 +85,12 @@
             cursor: pointer;
             font-size: 14px;
         }
+        .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
     </style>
 </head>
 <body>
@@ -117,6 +123,7 @@
     <table>
         <thead>
             <tr>
+                <th>Avatar</th>
                 <th>Name</th>
                 <th>Email</th>
                 <th>Actions</th>
@@ -125,6 +132,13 @@
         <tbody>
             @foreach($people as $person)
             <tr>
+                <td>
+                    @if($person->avatar_url)
+                        <img src="{{ $person->avatar_url }}" alt="Avatar" class="avatar">
+                    @else
+                        <div class="avatar" style="background-color: #ccc;"></div>
+                    @endif
+                </td>
                 <td>{{ $person->name }}</td>
                 <td>{{ $person->email }}</td>
                 <td>
