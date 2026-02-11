@@ -4,7 +4,7 @@ Sistema web para gerenciamento de pessoas e seus contatos telefônicos com códi
 
 ## Sobre o Projeto
 
-Aplicação Laravel que permite cadastrar pessoas e seus múltiplos contatos telefônicos. Cada contato inclui o código do país (obtido via API) e um número de telefone. O sistema também gera avatares aleatórios para cada pessoa usando a API do D&D.
+Aplicação Laravel que permite cadastrar pessoas e seus múltiplos contatos telefônicos. Cada contato inclui o código do país (obtido via API) e um número de telefone. O sistema também gera avatares aleatórios para cada pessoa usando Robohash.
 
 ## Requisitos
 
