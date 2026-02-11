@@ -20,9 +20,8 @@ class ContactController extends Controller
     {
         $personId = $request->query('person');
         $person = Person::findOrFail($personId);
-        $countries = $this->countryService->getAllCountries();
 
-        return view('contacts.form', compact('person', 'countries'));
+        return view('contacts.form', compact('person'));
     }
 
     public function show(Contact $contact)
@@ -51,9 +50,8 @@ class ContactController extends Controller
     public function edit(Contact $contact)
     {
         $person = $contact->person;
-        $countries = $this->countryService->getAllCountries();
 
-        return view('contacts.form', compact('contact', 'person', 'countries'));
+        return view('contacts.form', compact('contact', 'person'));
     }
 
     public function update(Request $request, Contact $contact)

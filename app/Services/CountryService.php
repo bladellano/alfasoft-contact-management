@@ -31,16 +31,20 @@ class CountryService
             return $this->getAllCountries();
         }
 
-        $response = Http::get($this->baseUrl . '/name/' . urlencode($name), [
-            'fields' => 'name,idd'
-        ]);
+        $cacheKey = 'countries_search_' . md5(strtolower($name));
 
-        if ($response->successful()) {
-            $countries = $response->json();
-            return $this->formatCountries($countries);
-        }
+        return Cache::remember($cacheKey, 3600, function () use ($name) {
+            $response = Http::get($this->baseUrl . '/name/' . urlencode($name), [
+                'fields' => 'name,idd'
+            ]);
 
-        return [];
+            if ($response->successful()) {
+                $countries = $response->json();
+                return $this->formatCountries($countries);
+            }
+
+            return [];
+        });
     }
 
     private function formatCountries($countries)
