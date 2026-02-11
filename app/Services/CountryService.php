@@ -7,7 +7,12 @@ use Illuminate\Support\Facades\Cache;
 
 class CountryService
 {
-    private $baseUrl = 'https://restcountries.com/v3.1';
+    private $baseUrl;
+
+    public function __construct()
+    {
+        $this->baseUrl = config('services.countries.api_url');
+    }
 
     public function getAllCountries()
     {

@@ -35,4 +35,8 @@ return [
         'api_url' => env('AVATAR_API_URL', 'https://www.dnd5eapi.co'),
     ],
 
+    'countries' => [
+        'api_url' => env('COUNTRIES_API_URL', 'https://restcountries.com/v3.1'),
+    ],
+
 ];
