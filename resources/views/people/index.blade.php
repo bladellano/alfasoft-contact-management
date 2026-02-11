@@ -69,9 +69,37 @@
             color: #155724;
             border: 1px solid #c3e6cb;
         }
+        .auth-info {
+            text-align: right;
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+        }
+        .btn-logout {
+            background-color: #dc3545;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
+    <div class="auth-info">
+        @auth
+            Logged in as: <strong>{{ auth()->user()->email }}</strong>
+            <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+                @csrf
+                <button type="submit" class="btn-logout">Logout</button>
+            </form>
+        @else
+            <a href="{{ route('login') }}" class="btn btn-secondary">Login</a>
+        @endauth
+    </div>
+
     <h1>People</h1>
 
     @if(session('success'))
@@ -81,7 +109,9 @@
     @endif
 
     <div class="actions">
-        <a href="{{ route('people.create') }}" class="btn btn-primary">Add New Person</a>
+        @auth
+            <a href="{{ route('people.create') }}" class="btn btn-primary">Add New Person</a>
+        @endauth
     </div>
 
     <table>
@@ -100,12 +130,14 @@
                 <td>
                     <div class="action-buttons">
                         <a href="{{ route('people.show', $person->id) }}" class="btn btn-secondary">View</a>
-                        <a href="{{ route('people.edit', $person->id) }}" class="btn btn-secondary">Edit</a>
-                        <form action="{{ route('people.destroy', $person->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this person?')">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger">Delete</button>
-                        </form>
+                        @auth
+                            <a href="{{ route('people.edit', $person->id) }}" class="btn btn-secondary">Edit</a>
+                            <form action="{{ route('people.destroy', $person->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this person?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        @endauth
                     </div>
                 </td>
             </tr>

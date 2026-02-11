@@ -67,9 +67,37 @@
             background-color: #dc3545;
             color: white;
         }
+        .auth-info {
+            text-align: right;
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+        }
+        .btn-logout {
+            background-color: #dc3545;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
+    <div class="auth-info">
+        @auth
+            Logged in as: <strong>{{ auth()->user()->email }}</strong>
+            <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+                @csrf
+                <button type="submit" class="btn-logout">Logout</button>
+            </form>
+        @else
+            <a href="{{ route('login') }}" class="btn btn-secondary">Login</a>
+        @endauth
+    </div>
+
     <h1>Contact Details</h1>
 
     <div class="person-info">
@@ -97,12 +125,14 @@
     </div>
 
     <div class="actions">
-        <a href="{{ route('contacts.edit', $contact->id) }}" class="btn btn-primary">Edit Contact</a>
-        <form action="{{ route('contacts.destroy', $contact->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this contact?')">
-            @csrf
-            @method('DELETE')
-            <button type="submit" class="btn btn-danger">Delete Contact</button>
-        </form>
+        @auth
+            <a href="{{ route('contacts.edit', $contact->id) }}" class="btn btn-primary">Edit Contact</a>
+            <form action="{{ route('contacts.destroy', $contact->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this contact?')">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn btn-danger">Delete Contact</button>
+            </form>
+        @endauth
         <a href="{{ route('people.show', $contact->person->id) }}" class="btn btn-secondary">Back to Person</a>
     </div>
 </body>
