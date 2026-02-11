@@ -52,4 +52,11 @@ class PersonController extends Controller
 
         return redirect()->route('people.index')->with('success', 'Person updated successfully.');
     }
+
+    public function destroy(Person $person)
+    {
+        $person->delete();
+
+        return redirect()->route('people.index')->with('success', 'Person deleted successfully.');
+    }
 }
