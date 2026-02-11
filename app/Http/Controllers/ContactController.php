@@ -25,6 +25,16 @@ class ContactController extends Controller
         return view('contacts.form', compact('person', 'countries'));
     }
 
+    public function show(Contact $contact)
+    {
+        $contact->load('person');
+        $countries = $this->countryService->getAllCountries();
+
+        $countryName = collect($countries)->firstWhere('calling_code', $contact->country_code)['name'] ?? 'Unknown';
+
+        return view('contacts.show', compact('contact', 'countryName'));
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([
